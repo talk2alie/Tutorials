@@ -2,11 +2,20 @@
 
 <h2>Create</h2>
 <form method="post">
-    <input asp-for="Name" />
-    <select 
-            asp-for="Cuisine" 
-            asp-items="@Html.GetEnumSelectList<CuisineType>()">
-    </select>
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <div style="color: red;">
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+    <div>
+        <label asp-for="Cuisine"></label>
+        <select 
+                asp-for="Cuisine" 
+                asp-items="@Html.GetEnumSelectList<CuisineType>()">
+        </select>
+    </div>
     <input type="submit" name="save" value="Save" />
 </form>
 
