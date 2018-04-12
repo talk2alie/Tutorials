@@ -47,6 +47,8 @@ namespace OdeToFood.Controllers
                 Cuisine = model.Cuisine
             };
 
+            _restaurantData.Add(restaurant);
+            return RedirectToAction(nameof(Details), new { id = restaurant.Id });
         }
     }
 }

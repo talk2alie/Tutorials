@@ -30,5 +30,10 @@ namespace OdeToFood.Services
             return _restaurants.SingleOrDefault(restaurant => restaurant.Id == id);
         }
 
+        public void Add(Restaurant restaurant)
+        {
+            restaurant.Id = _restaurants.Max(entry => entry.Id) + 1;
+            _restaurants.Add(restaurant);
+        }
     }
 }

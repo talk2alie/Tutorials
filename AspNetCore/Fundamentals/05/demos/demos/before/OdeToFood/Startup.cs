@@ -20,7 +20,7 @@ namespace OdeToFood
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddScoped<IRestaurantData, InMemoryRestaurantData>();
+            services.AddSingleton<IRestaurantData, InMemoryRestaurantData>();
             services.AddMvc();
         }
 
@@ -40,7 +40,7 @@ namespace OdeToFood
           
             app.Run(async (context) =>
             {
-                var greeting = greeter.GetMessageOfTheDay();
+                string greeting = greeter.GetMessageOfTheDay();
                 context.Response.ContentType = "text/plain";
                 await context.Response.WriteAsync($"Not found");
             });
