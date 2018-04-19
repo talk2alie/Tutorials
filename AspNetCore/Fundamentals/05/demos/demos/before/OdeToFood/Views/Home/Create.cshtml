@@ -2,7 +2,10 @@
 
 <h2>Create</h2>
 <form method="post">
-    <input asp-for="Name" />
+    <div>
+        <input asp-for="Name" /> <br />
+        <span style="color: red;" asp-validation-for="Name"></span>
+    </div>
     <select 
             asp-for="Cuisine" 
             asp-items="@Html.GetEnumSelectList<CuisineType>()">
