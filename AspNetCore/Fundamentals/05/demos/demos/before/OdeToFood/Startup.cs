@@ -10,17 +10,27 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Routing;
 using OdeToFood.Services;
+using OdeToFood.Models;
+using Microsoft.EntityFrameworkCore;
+using OdeToFood.Repositories;
 
 namespace OdeToFood
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<OdeToFoodDbContext>(optionsAction => 
+                optionsAction.UseSqlServer(Configuration.GetSection("ConnectionStrings")["OdeToFoodDb"]));
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddSingleton<IRestaurantData, InMemoryRestaurantData>();
+            services.AddTransient<IRestaurantRepository, RestaurantRespository>();
             services.AddMvc();
         }
 
