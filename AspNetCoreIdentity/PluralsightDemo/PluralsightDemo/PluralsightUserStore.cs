@@ -115,7 +115,7 @@ namespace PluralsightDemo
 
         public static DbConnection GetOpenConnection()
         {
-            var connection = new SqlConnection("Data Source = MALIETECH\\DEV110;" +
+            var connection = new SqlConnection("Data Source = (localdb)\\mssqllocaldb;" + //  MALIETECH\\DEV110
                 "database=PluralsightDemo;Trusted_Connection=Yes;");
             connection.Open();
             return connection;
