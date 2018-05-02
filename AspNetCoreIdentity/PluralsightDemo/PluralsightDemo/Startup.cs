@@ -25,6 +25,8 @@ namespace PluralsightDemo
             services.AddMvc();
             services.AddIdentityCore<PluralsightUser>(options => { });
             services.AddScoped<IUserStore<PluralsightUser>, PluralsightUserStore>();
+            services.AddAuthentication("cookies")
+                .AddCookie("cookies", options => options.LoginPath = "/Home/Login");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +42,7 @@ namespace PluralsightDemo
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseAuthentication();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
