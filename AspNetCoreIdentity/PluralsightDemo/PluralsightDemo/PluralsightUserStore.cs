@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace PluralsightDemo
 {
-    public class PluralsightUserStore : IUserStore<PluralsightUser>
+    public class PluralsightUserStore : IUserStore<PluralsightUser>, IUserPasswordStore<PluralsightUser>
     {
         public async Task<IdentityResult> CreateAsync(PluralsightUser user, CancellationToken cancellationToken)
         {
-            using(var connection = GetOpenConnection())
+            using (DbConnection connection = GetOpenConnection())
             {
                 await connection.ExecuteAsync(
                     "insert into PluralsightUsers([Id]," +
@@ -47,15 +47,20 @@ namespace PluralsightDemo
 
         public async Task<PluralsightUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            using (var connection = GetOpenConnection())
+            using (DbConnection connection = GetOpenConnection())
             {
-                return await connection.QueryFirstOrDefaultAsync<PluralsightUser>("select * from PluralsightUsers where [Id] = @id", new {id = userId});
+                return await connection.QueryFirstOrDefaultAsync<PluralsightUser>("select * from PluralsightUsers where [Id] = @id", new { id = userId });
             }
         }
 
-        public Task<PluralsightUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<PluralsightUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            using (DbConnection connection = GetOpenConnection())
+            {
+                return await connection.QueryFirstOrDefaultAsync<PluralsightUser>("select * from PluralsightUsers where " +
+                    "[NormalizedUserName] = @normalizedUserName",
+                    new { normalizedUserName = normalizedUserName });
+            }
         }
 
         public Task<string> GetNormalizedUserNameAsync(PluralsightUser user, CancellationToken cancellationToken)
@@ -83,7 +88,6 @@ namespace PluralsightDemo
         {
             user.UserName = userName;
             return Task.CompletedTask;
-        
         }
 
         public async Task<IdentityResult> UpdateAsync(PluralsightUser user, CancellationToken cancellationToken)
@@ -111,10 +115,26 @@ namespace PluralsightDemo
 
         public static DbConnection GetOpenConnection()
         {
-            var connection = new SqlConnection("Data Source = (LocalDb)\\MSSQLLocalDB;" +
+            var connection = new SqlConnection("Data Source = MALIETECH\\DEV110;" +
                 "database=PluralsightDemo;Trusted_Connection=Yes;");
             connection.Open();
             return connection;
+        }
+
+        public Task SetPasswordHashAsync(PluralsightUser user, string passwordHash, CancellationToken cancellationToken)
+        {
+            user.PasswordHash = passwordHash;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetPasswordHashAsync(PluralsightUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> HasPasswordAsync(PluralsightUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash != null);
         }
     }
 }

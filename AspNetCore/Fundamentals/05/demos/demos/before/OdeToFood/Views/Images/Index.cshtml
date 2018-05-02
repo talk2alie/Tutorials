@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Images!";
+}
+
+<h2>Upload an Image</h2>
+
+<form role="form" asp-action="Upload" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        @Html.AntiForgeryToken()
+        <input type="file" class="form-control" id="image" name="image">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

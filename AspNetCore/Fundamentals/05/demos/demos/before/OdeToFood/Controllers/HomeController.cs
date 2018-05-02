@@ -25,7 +25,7 @@ namespace OdeToFood.Controllers
         public IActionResult Details(int id)
         {
             Restaurant model = _repository.Get(id);
-            if(model == null)
+            if (model == null)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -43,7 +43,7 @@ namespace OdeToFood.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(RestaurantEditModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
